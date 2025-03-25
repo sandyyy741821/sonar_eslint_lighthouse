@@ -3,8 +3,8 @@ let   number=  10;
 console.log("Number is:", number);
 
 function greet (name){
-console.log( "Hello, "+name ); 
-return "Greetings "+name;
+  console.log( "Hello, "+name ); 
+  return "Greetings "+name;
 }
 
 const multiply=(a ,b) => a*b;

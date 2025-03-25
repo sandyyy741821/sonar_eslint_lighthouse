@@ -14,7 +14,7 @@ export default [
       },
     },
     rules: {
-      "no-console": "warn",
+      "no-console": "off",
       "no-undef": "error",
       "semi": ["error", "always"],
       "quotes": ["error", "double"],

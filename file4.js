@@ -4,7 +4,7 @@ console.log(square(4));
 
 
 const printMessage = message => {
-console.log( message );
+  console.log( message );
 };
 
 printMessage( "ESLint is fixing me!" );
