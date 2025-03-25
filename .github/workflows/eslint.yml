@@ -14,13 +14,30 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-
-      - name: Install Dependencies
-        run: npm ci
+          node-version: '18'
 
       - name: Install ESLint
-        run: npm install eslint --save-dev
+        run: |
+            npm init -y
+            npm install eslint@9 --save-dev
+
+            # Create a valid eslint.config.js
+            cat <<EOL > eslint.config.js
+            export default [
+                {
+                    ignores: ["node_modules/"], 
+                    rules: {
+                    "semi": ["error", "always"],
+                    "quotes": ["error", "double"],
+                    "no-unused-vars": "warn",
+                    "no-var": "error",
+                    "arrow-spacing": ["error", { "before": true, "after": true }],
+                    "object-curly-spacing": ["error", "always"],
+                    "space-before-function-paren": ["error", "always"]
+                    },
+                },
+                ];
+            EOL
 
       - name: Run ESLint
         run: npx eslint *.js
