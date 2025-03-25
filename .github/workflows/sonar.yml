@@ -1,0 +1,50 @@
+name: SonarQube Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sonar_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Add SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Start SonarQube on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          cd /opt/sonarqube/bin/linux-x86-64
+          ./sonar.sh start
+          EOF
+
+      - name: Wait for SonarQube to Start
+        run: sleep 60      
+
+      - name: Run SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: http://${{ secrets.EC2_PUBLIC_IP }}:9000  
+
+      - name: Stop SonarQube on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          cd /opt/sonarqube/bin/linux-x86-64
+          ./sonar.sh stop
+          EOF
+
+  lint_code:
+    needs: sonar_scan  
+    uses: ./.github/workflows/eslint.yml
