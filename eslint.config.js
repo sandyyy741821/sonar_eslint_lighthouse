@@ -1,6 +1,16 @@
 export default [
   {
-    ignores: ["node_modules/"], 
+    ignores: ["node_modules/", "dist/"], 
+  },
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module", 
+      globals: {
+        console: "readonly",
+      },
+    },
     rules: {
       "semi": ["error", "always"],
       "quotes": ["error", "double"],
