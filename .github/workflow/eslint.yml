@@ -1,0 +1,29 @@
+name: ESLint Check
+
+on:
+  workflow_call:
+
+jobs:
+  lint_code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install ESLint
+        run: |
+            npm init -y
+            npm install eslint@9 --save-dev
+
+      - name: Run ESLint
+        run: npx eslint *.js
+
+  lighthouse_audit:
+    needs: lint_code  
+    uses: ./.github/workflows/lighthouse.yml
