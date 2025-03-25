@@ -6,4 +6,3 @@ function getPersonInfo (){
 }
 
 console.log( getPersonInfo() );
-

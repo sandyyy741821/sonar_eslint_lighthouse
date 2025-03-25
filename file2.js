@@ -2,6 +2,6 @@
 let  x=  100;
 
 let unusedVar = "I am not used";
+console.log("This is unusedVar:", unusedVar);
 
 console.log("The value of x is: " + x);
-
