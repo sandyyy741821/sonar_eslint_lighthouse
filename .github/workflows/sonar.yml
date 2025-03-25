@@ -21,13 +21,15 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-      - name: Start SonarQube on EC2
+          
+      - name: Connect to EC2 & Start SonarQube
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
           cd /opt/sonarqube/bin/linux-x86-64
           ./sonar.sh start
           EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Wait for SonarQube to Start
         run: sleep 60      
@@ -38,12 +40,28 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: http://${{ secrets.EC2_PUBLIC_IP }}:9000  
 
+      - name: Wait for SonarQube Analysis
+        run: sleep 30
+
+      - name: Fetch SonarQube Issues
+        run: |
+          curl -u ${{ secrets.SONAR_TOKEN }}: \
+          "http://${{ secrets.EC2_PUBLIC_IP }}:9000/api/issues/search?componentKeys=car_web_deployment&types=BUG,VULNERABILITY,CODE_SMELL" \
+          | jq '.' > sonarqube_issues.json
+      - name: Upload SonarQube Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarqube-report
+          path: sonarqube_issues.json        
+
       - name: Stop SonarQube on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
           cd /opt/sonarqube/bin/linux-x86-64
           ./sonar.sh stop
           EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   lint_code:
     needs: sonar_scan  
