@@ -20,7 +20,7 @@ jobs:
         run: npm install eslint --save-dev
 
       - name: Run ESLint
-        run: npx eslint . --config .eslint.config.js
+        run: npx eslint 
 
   lighthouse_audit:
     needs: lint_code  # **Trigger Lighthouse after ESLint**
