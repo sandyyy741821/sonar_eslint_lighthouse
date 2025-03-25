@@ -1,15 +1,13 @@
 {
-    "ci": {
-      "collect": {
-        "staticDistDir": "./"
-      },
-      "assert": {
-        "preset": "lighthouse:no-pwa",
-        "assertions": {
-          "errors-in-console": "off",
-          "render-blocking-resources": "off"
-        }
-      }
+  "ci": {
+    "collect": {
+      "url": [
+        "http://localhost:50460/index.html"  
+      ],
+      "staticDistDir": "./build"  
+    },
+    "upload": {
+      "target": "temporary-public-storage"  
     }
   }
-  
+}
