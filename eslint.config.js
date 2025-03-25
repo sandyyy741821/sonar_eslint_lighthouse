@@ -1,24 +1,26 @@
 export default [
   {
-    ignores: ["node_modules/", "dist/"], 
+    ignores: ["node_modules/", "dist/", "build/", "coverage/"],
   },
   {
-    files: ["**/*.js"],
+    files: ["**/*.js", "**/*.jsx"],
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "module", 
+      sourceType: "module",
       globals: {
         console: "readonly",
+        process: "readonly",
+        module: "readonly",
       },
     },
     rules: {
+      "no-console": "warn",
+      "no-undef": "error",
       "semi": ["error", "always"],
       "quotes": ["error", "double"],
-      "no-unused-vars": "warn",
-      "no-var": "error",
-      "arrow-spacing": ["error", { "before": true, "after": true }],
-      "object-curly-spacing": ["error", "always"],
-      "space-before-function-paren": ["error", "always"]
+      "indent": ["error", 2],
+      "eqeqeq": "error",
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     },
   },
 ];
