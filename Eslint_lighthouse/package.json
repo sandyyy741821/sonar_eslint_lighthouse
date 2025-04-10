@@ -1,0 +1,25 @@
+{
+  "name": "eslint_lighthouse",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sandyyy741821/sonar_eslint_lighthouse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sandyyy741821/sonar_eslint_lighthouse/issues"
+  },
+  "homepage": "https://github.com/sandyyy741821/sonar_eslint_lighthouse#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "eslint": "^9.23.0",
+    "globals": "^16.0.0"
+  }
+}
